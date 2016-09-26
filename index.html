@@ -21,7 +21,8 @@
 		keys[e.keyCode] = false;
 	});
         canvas.addEventListener("click", function (e) {
-                var x = e.pageX;
+                var rect = canvas.getBoundingClientRect();
+                var x = e.clientX - rect.left;
                 if(x < canvas.width/2)
                     clickLeft = true;
                 else
