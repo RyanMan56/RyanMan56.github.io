@@ -20,6 +20,13 @@
 	document.body.addEventListener("keyup", function (e) {
 		keys[e.keyCode] = false;
 	});
+        canvas.addEventListener("click", function (e) {
+                var x = e.pageX;
+                if(x < canvas.width/2)
+                    clickLeft = true;
+                else
+                    clickRight = true;
+        }):
 	var ctx = canvas.getContext("2d");
 	var ballX = canvas.width/2;
 	var ballY = canvas.height-40;
@@ -35,6 +42,8 @@
 	var offsetY = 10;
 	var bat = {x : canvas.width/2-15, y : canvas.height - 30, width : 30, height : 5};
 	var keys = [];
+        var clickLeft = false;
+        var clickRight = false;
 
 	var blocks = [];
 	blocks[0] = {x : offsetX + width * 0, y : offsetY + height * 0};
@@ -140,10 +149,10 @@
 		ctx.fill();
 		ctx.closePath();
 
-		if(keys[39])
+		if(keys[39] || clickRight)
 			if(batDx < batDxMax)
 				batDx++;
-		if(keys[37])
+		if(keys[37] || clickLeft)
 			if(batDx > -batDxMax)
 				batDx--;	
 
@@ -151,6 +160,8 @@
 			bat.x += batDx;
 			batDx *= acceleration;
 		}
+                clickLeft = false;
+                clickRight = false;
 		if(bat.x < 0)
 			bat.x = 0;
 		if(bat.x + bat.width > canvas.width)
