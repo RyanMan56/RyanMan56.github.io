@@ -24,10 +24,14 @@
 	canvas.onmousedown = function(e){
 		var rect = canvas.getBoundingClientRect();
                 var x = e.clientX - rect.left;
-                if(x < canvas.width/2)
-                    clickLeft = true;
-                else
-                    clickRight = true;
+                if(x < canvas.width/2){
+                    	clickLeft = true;
+			clickRight = false;
+		}
+                else{
+                    	clickRight = true;
+			clickLeft = false;
+		}
 	}
 	canvas.onmouseup = function(e){
 		clickLeft = false;
