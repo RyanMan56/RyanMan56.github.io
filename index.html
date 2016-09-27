@@ -20,14 +20,27 @@
 	document.body.addEventListener("keyup", function (e) {
 		keys[e.keyCode] = false;
 	});
-        canvas.addEventListener("click", function (e) {
-                var rect = canvas.getBoundingClientRect();
+	
+	canvas.onmousedown = function(e){
+		var rect = canvas.getBoundingClientRect();
                 var x = e.clientX - rect.left;
                 if(x < canvas.width/2)
                     clickLeft = true;
                 else
                     clickRight = true;
-        });
+	}
+	canvas.onmouseup = function(e){
+		clickLeft = false;
+		clickRight = false;
+	}
+//         canvas.addEventListener("click", function (e) {
+//                 var rect = canvas.getBoundingClientRect();
+//                 var x = e.clientX - rect.left;
+//                 if(x < canvas.width/2)
+//                     clickLeft = true;
+//                 else
+//                     clickRight = true;
+//         });
 	var ctx = canvas.getContext("2d");
 	var ballX = canvas.width/2;
 	var ballY = canvas.height-40;
