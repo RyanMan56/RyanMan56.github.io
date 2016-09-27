@@ -22,21 +22,54 @@
 	});
 	
 	canvas.onmousedown = function(e){
+		mouseClicked = true;
+
 		var rect = canvas.getBoundingClientRect();
-                var x = e.clientX - rect.left;
-                if(x < canvas.width/2){
-                    	clickLeft = true;
+        var x = e.clientX - rect.left;
+        if(x < canvas.width/2){
+           	clickLeft = true;
 			clickRight = false;
 		}
-                else{
-                    	clickRight = true;
+        else{
+           	clickRight = true;
 			clickLeft = false;
 		}
 	}
+	canvas.onmousemove = function(e){
+		if(mouseClicked){
+			var rect = canvas.getBoundingClientRect();
+		    var x = e.clientX - rect.left;
+		    if(x < canvas.width/2){
+		       	clickLeft = true;
+				clickRight = false;
+			}
+		    else{
+		       	clickRight = true;
+				clickLeft = false;
+			}
+		}
+		// console.log(canvas.width);
+		console.log(x);
+	}
 	canvas.onmouseup = function(e){
+		mouseClicked = false;
 		clickLeft = false;
 		clickRight = false;
 	}
+
+	// document.body.onmousemove = function(e){
+	// 	var rect = canvas.getBoundingClientRect();
+	//     var x = e.clientX - rect.left;
+	// 	if(x < 0 || x > canvas.width){
+	// 		mouseClicked = false;
+	// 		clickLeft = false;
+	// 		clickRight = false;
+	// 	}
+	// 	else{
+	// 		mouseClicked = true;
+	// 	}
+		
+	// }
 //         canvas.addEventListener("click", function (e) {
 //                 var rect = canvas.getBoundingClientRect();
 //                 var x = e.clientX - rect.left;
@@ -60,10 +93,11 @@
 	var offsetY = 10;
 	var bat = {x : canvas.width/2-15, y : canvas.height - 30, width : 30, height : 5};
 	var keys = [];
-        var clickLeft = false;
-        var clickRight = false;
-
+    var clickLeft = false;
+    var clickRight = false;
+    var mouseClicked = false;
 	var blocks = [];
+
 	blocks[0] = {x : offsetX + width * 0, y : offsetY + height * 0};
 	blocks[1] = {x : offsetX + width * 2, y : offsetY + height * 0};
 	blocks[2] = {x : offsetX + width * 3, y : offsetY + height * 0};
@@ -98,7 +132,6 @@
 	blocks[31] = {x : offsetX + width * 3, y : offsetY + height * 11};
 	blocks[32] = {x : offsetX + width * 4, y : offsetY + height * 11};
 	blocks[33] = {x : offsetX + width * 5, y : offsetY + height * 11};
-
 	blocks[34] = {x : offsetX + width * 9, y : offsetY + height * 7};
 	blocks[35] = {x : offsetX + width * 10, y : offsetY + height * 7};
 	blocks[36] = {x : offsetX + width * 11, y : offsetY + height * 7};
@@ -122,26 +155,21 @@
 	blocks[5].color = "#de1c75";
 	blocks[7].color = "#de1c75";
 	blocks[9].color = "#de1c75";
-
 	blocks[34].color = "#de1c75";
 	blocks[35].color = "#de1c75";
 	blocks[36].color = "#de1c75";
 	blocks[37].color = "#de1c75";
-
-
-
 	// blocks[0].x = 10;
 	// blocks[0].y = 10;
 	// blocks[0].width = 5;
 	// blocks[0].height = 5;
-
 	function checkCollisions(x1, y1, w1, h1, x2, y2, w2, h2){
 		if(x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2)
 			return true;
 		else
 			return false;
 	}
-
+	
 	function checkEdgeCollisions(x1, y1, w1, h1, x2, y2, w2, h2){
 		// Rect 1 Right Edge
 		if(checkCollisions(x1+w1-1, y1+1, 1, h1-2, x2, y2+1, 1, h2-2))
@@ -173,7 +201,6 @@
 		if(keys[37] || clickLeft)
 			if(batDx > -batDxMax)
 				batDx--;	
-
 		if(bat.x >= 0 && bat.x + bat.width <= canvas.width){
 			bat.x += batDx;
 			batDx *= acceleration;
@@ -184,7 +211,6 @@
 			bat.x = 0;
 		if(bat.x + bat.width > canvas.width)
 			bat.x = canvas.width - bat.width;
-
 		ballX += dx;
 		ballY += dy;
 		if(ballX + radius >= canvas.width)
@@ -195,12 +221,10 @@
 			// dy = -dy;
 		if(ballY - radius <= 0)
 			dy = -dy;
-
 		if(ballX < 0)
 			ballX = 1 + radius;
 		if(ballX + radius > canvas.width)
 			ballX = canvas.width - radius;
-
 		if(ballX + radius >= bat.x && ballX - radius <= bat.x + bat.width && ballY + radius >= bat.y && ballY - radius <= bat.y + bat.height){
 			var ballOnBatRatio = (ballX - bat.x) / bat.width;
 			dx = (ballOnBatRatio * 2) - 1;
@@ -214,7 +238,6 @@
 				ctx.fillStyle = blocks[i].color;
 				ctx.fill();
 				ctx.closePath();	
-
 				//if(ballX+radius >= blocks[i].x && ballX-radius <= blocks[i].x+width-1 && ballY+radius >= blocks[i].y && ballY-radius <= blocks[i].y+height-1){
 				if(checkCollisions(ballX-radius, ballY-radius, radius*2, radius*2, blocks[i].x, blocks[i].y, width-1, height-1)){
 					blocks[i].alive = false;
@@ -227,7 +250,6 @@
 						dy = Math.abs(dy);
 					else if(collisionSide == "bottom")
 						dy = -Math.abs(dy);
-
 					// if(ballX+radius < blocks[i].x+(width-1)/6 || ballX-radius > blocks[i].x+(width-1)*5/6){
 					// 	dx = -dx;
 					// } else{
@@ -236,7 +258,6 @@
 				}
 			}
 		}
-
 		ctx.beginPath();
 		ctx.rect(bat.x, bat.y, bat.width, bat.height);
 		ctx.fillStyle = "#de1c75";
@@ -244,13 +265,11 @@
 		ctx.closePath();
 	}
 	setInterval(draw, 10);
-
 	// ctx.beginPath();
 	// ctx.rect(80, 10, 60, 30);
 	// ctx.fillStyle = "#de1c75";
 	// ctx.fill();
 	// ctx.closePath();
-
 	
 </script>
 
